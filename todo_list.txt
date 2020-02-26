@@ -1,0 +1,51 @@
+Write code to compare the N matrices for GMACS and not_gmacs
+
+Add in for comparison:
+ immature/mature natural mortality
+
+Add in for fitting:
+ different survey q by sex
+
+Set a .PIN file based on not_gmacs
+Run one function call
+Compare the N matrices
+
+Check timing of different processes between models
+
+fix calc size comps function so they can be split out by maturity/shell
+
+tALK TO PEOPLE ABOUT FEMALE DISCARDS--selectivity is so much different and hard to figure out 'total' selectivity and 'female' selectivity
+ I don't understand the mechanism here.
+ it seems like this suggests that selectivity means 'availability' here...and there is targeting
+
+Check to see the timing of molting maturity between the two models:
+ is the probability of maturity from 2016sc based on the postmolt or premolt?
+
+shell_force: does not have terminal molt, uses shell condition to get in mature/immmature
+comp_n: trying to match output in not_gmacs_2, uses code from term_molt
+not_gmacs_2: current assessment code, but using simplified assumptions (single recdevs, etc.)
+term_molt: introduces terminal molt to GMACS
+
+
+
+Errors to build in:
+ nmature and nshell cannot both be 2
+
+processes:
+ recruitment (sex ratio equal, calculate initial recruitment from estimated initial N)
+ recruit at size (output the proportions per bin, estimate parameters based on gmacs code)
+ selectivity (get parameters in the same space)
+ growth (input growth increments; might have to calculate the 
+ fishing mortality (where do I input this?)
+ molting probability (input)
+ natural mortality 
+
+
+Start thinking about steps to get assessment running:
+  managment output
+  how to incorporate growth (skip to linear after you show GMACS can reproduce dynamics)
+  how to incorporate BSFRF data
+  how to incorporate maturity data
+
+
+
