@@ -1,4 +1,4 @@
-Write code to compare the N matrices for GMACS and not_gmacs
+rec_sdd (size at recruitment) is close, but not exact (to 3 decimal places) and I do not know why.
 
 Add in for comparison:
  immature/mature natural mortality

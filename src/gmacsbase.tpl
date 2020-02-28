@@ -1276,7 +1276,7 @@ DATA_SECTION
    if (slx_type(k) >=0)
    {
     int kk = slx_indx(k);
-    cout << k << " " << kk << " " << slx_cols(k) << endl;
+    //cout << k << " " << kk << " " << slx_cols(k) << endl;
     for ( int j = 1; j <= slx_cols(k); j++ )               ///> read parameters for each pattern
      {
       int jj = kk + (j - 1);
@@ -1320,8 +1320,8 @@ DATA_SECTION
     else
     { log_slx_pars_init(jj) = log(slx_par(k,i)); jj++; }
  END_CALCS
- !! cout << log_slx_pars_init << endl;
- !! cout << slx_par << endl;
+ // !! cout << log_slx_pars_init << endl;
+ // !! cout << slx_par << endl;
 
   init_int NumAsympRet;                                    /// > Number of asymptotic retention
   init_matrix AsympSel_control(1,NumAsympRet,1,7);         /// > Read the parameters
@@ -2085,16 +2085,16 @@ DATA_SECTION
 // ================================================================================================
 
 INITIALIZATION_SECTION
-  theta               theta_ival;
-  Grwth               Grwth_ival;
-  Asymret             AsympSel_ival
-  log_fbar            log_pen_fbar;
-  log_vn              log_nvn_ival;
-  survey_q            q_ival;
-  logit_rec_prop_est  init_sex_ratio;
-  log_add_cv          log_add_cv_ival;
-  m_dev_est           Mdev_ival;
-  log_slx_pars        log_slx_pars_init
+  // theta               theta_ival;
+  // Grwth               Grwth_ival;
+  // Asymret             AsympSel_ival
+  // log_fbar            log_pen_fbar;
+  // log_vn              log_nvn_ival;
+  // survey_q            q_ival;
+  // logit_rec_prop_est  init_sex_ratio;
+  // log_add_cv          log_add_cv_ival;
+  // m_dev_est           Mdev_ival;
+  // log_slx_pars        log_slx_pars_init
 
 // ================================================================================================
 
@@ -2189,6 +2189,8 @@ PARAMETER_SECTION
   // logN0     = theta(12,...)
   init_bounded_number_vector theta(1,ntheta,theta_lb,theta_ub,theta_phz);
   !! ECHO(theta);
+  
+  !! cout<<"theta"<<theta<<endl;
   // Growth and molting probability parameters (sex-specific)
   init_bounded_number_vector Grwth(1,nGrwth,Grwth_lb,Grwth_ub,Grwth_phz);
   !!ECHO(Grwth);
@@ -3240,6 +3242,7 @@ FUNCTION calc_natural_mortality
   for (int h=1;h<=nsex;h++)
    {
     M(h) = M0(h);
+
     delta.initialize();
     switch( m_type )
      {
@@ -3759,6 +3762,17 @@ FUNCTION calc_recruitment_size_distribution
     rec_sdd(h) /= sum(rec_sdd(h)); // Standardize so each row sums to 1.0
    }
 
+   // snow crab way
+   for ( int h=1; h <=nsex; h++)
+   {
+    ralpha = ra(h) / rbeta(h);
+    for ( int l = 1; l <= 6; l++ )  
+     rec_sdd(h,l) = pow(size_breaks(l)+2.5-size_breaks(1),ralpha-1)*mfexp(-(size_breaks(l)+2.5-size_breaks(1))/rbeta(h));
+    
+	rec_sdd(h) /= sum(rec_sdd(h)); // Standardize so each row sums to 1.0
+   }
+   
+   
 // ============================================================================================================================================
 
   /**
@@ -3850,7 +3864,6 @@ FUNCTION calc_initial_numbers_at_length
   dvar_matrix _S(1,nclass,1,nclass);
   _S.initialize();
 
-  cout<<"LogNO"<<logN0<<endl;
   
   Eqn_basis = CONSTANTREC;                                ///> Need to run brute force with constant recruitment
   switch( bInitializeUnfished )

@@ -8,6 +8,7 @@ library(dplyr)
 library(knitr)
 library(ggplot2)
 library(PBSmodelling)
+library(miceadds)
 
 # directory in which all of the scenario folder reside and names of the scenario folders
 Scenarios   <-c("not_gmacs_2")
@@ -118,7 +119,7 @@ in_path<-"C:/gmacs/gmr/R/"
 source.all( path=in_path, grepstring="\\.R",  print.source=TRUE, file_sep="__"  )
 
 mod_names <- c("opilio")
-.MODELDIR = c("./term_molt/")
+.MODELDIR = c("./comp_n/")
 .OVERLAY  = TRUE
 .SEX      = c("Aggregate","Male","Female")
 .FLEET    = c("Pot","Trawl bycatch","NMFS Trawl")
@@ -134,23 +135,43 @@ names(M) <- mod_names
 #===============================
 # Compare N matrices
 #===============================
-
+names(M[[1]])
+plot(M[[1]]$recruits)
 
 tot_females<-snowad.rep[[1]]$"Estimated numbers of immature new shell female crab" +                                           
 snowad.rep[[1]]$"Estimated numbers of immature old shell female crab" +                                           
 snowad.rep[[1]]$"Estimated numbers of mature new shell female crab" +                                             
 snowad.rep[[1]]$"Estimated numbers of mature old shell female crab" 
 
-plot(M[[1]]$N_females[1,],type='l')
-lines(tot_females[1,],lty=2)
+plot(M[[1]]$N_females[1,],type='l',lty=2)
+lines(tot_females[1,2:ncol(tot_females)],lty=3,col=2)
+
+par(mfrow=c(8,5),mar=c(.1,.1,.1,.1),oma=c(4,4,1.5,1))
+for(x in 1:nrow(tot_females))
+{
+  plot(M[[1]]$N_females[x,],type='l',lty=2,xaxt='n',yaxt='n')
+  lines(tot_females[x,2:ncol(tot_males)],lty=3,col=2)
+}
+plot.new()
+legend('center',bty='n',col=c(1,2),pch=16,legend=c("GMACS","Jack"))
+mtext(side=3,"Total female numbers at length (predicted)",outer=T)
+
 
 tot_males<-snowad.rep[[1]]$"Estimated numbers of immature new shell male crab" +                                           
   snowad.rep[[1]]$"Estimated numbers of immature old shell male crab" +                                           
   snowad.rep[[1]]$"Estimated numbers of mature new shell male crab" +                                             
   snowad.rep[[1]]$"Estimated numbers of mature old shell male crab" 
 
-plot(M[[1]]$N_males[1,],type='l')
-lines(tot_males[1,],lty=2)
+par(mfrow=c(8,5),mar=c(.1,.1,.1,.1),oma=c(4,4,1.5,1))
+for(x in 1:nrow(tot_males))
+{
+plot(M[[1]]$N_males[x,],type='l',lty=2,xaxt='n',yaxt='n')
+lines(tot_males[x,2:ncol(tot_males)],lty=3,col=2)
+}
+plot.new()
+legend('center',bty='n',col=c(1,2),pch=16,legend=c("GMACS","Jack"))
+mtext(side=3,"Total male numbers at length (predicted)",outer=T)
 
 
-
+male_dif<-(M[[1]]$N_males[1:38,] - tot_males[,2:ncol(tot_males)])/M[[1]]$N_males[1:38,]
+mean(male_dif)

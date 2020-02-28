@@ -9,106 +9,106 @@
 ## ———————————————————————————————————————————————————————————————————————————————————— ##																					
 ## ival        lb        ub        phz   prior     p1      p2         # parameter       ##																					
 ## ———————————————————————————————————————————————————————————————————————————————————— ##																					
-    0.30        0.15    0.5         -4       0    0.18    0.04        # M (male)																					
-    0.41        0.15    0.5         -4       0    0.18    0.04        # M (female)																					
-   16.5       -10        20         -2       0  -10.0    20.0         # logR0																					
-   15.0       -10        30         -1       0   10.0    20.0         # logRini, to estimate if NOT initialized at unfished (n68)"																					
-   13.26245375 -10        30         1       0   10.0    20.0         # logRbar, to estimate if NOT initialized at unfished      #1"																					
-   32.5        27.5     42.5        4       1   32.5     2.25        # recruitment expected value (males or combined)																					
-	0.50	   0.1       1	        4       0    0.1     5.0         # recruitment scale (variance component) (males or combined)																				
-    0.0        -10      10         -4       0   0.0     20.00        # recruitment expected value (females)																					
-    0.00       -10      10 	        -3       0    0.0    20.0         # recruitment scale (variance component) (females)																				
-   -0.9       -10         0.75      -4       0  -10.0     0.75        # ln(sigma_R)																					
-    0.75        0.20      1.00      -2       3    3.0     2.00        # steepness																					
-    0.01        0.0001    1.00      -3       3    1.01    1.01        # recruitment autocorrelation																					
-    13.52117658  	-10      25          1       0   10.0    20.00        # Deviation for size-class 1 (normalization class)																					
-	12.74579678		-10      25          1       0   10.0    20.00        # Deviation for size-class 2	# mature males																	
-	12.43900121		-10      25          1       0   10.0    20.00        # Deviation for size-class 3																		
-	12.37540847		-10      25          1       0   10.0    20.00        # Deviation for size-class 4																		
-	12.40797545		-10      25          1       0   10.0    20.00        # Deviation for size-class 5																		
-	12.33589718		-10      25          1       0   10.0    20.00        # Deviation for size-class 6																		
-	12.14775325		-10      25          1       0   10.0    20.00        # Deviation for size-class 7																		
-	11.88102472		-10      25          1       0   10.0    20.00        # Deviation for size-class 8																		
-	11.74339277		-10      25          1       0   10.0    20.00        # Deviation for size-class 9																		
-	11.6203129		-10      25          1       0   10.0    20.00        # Deviation for size-class 10																		
-	11.24054823		-10      25          1       0   10.0    20.00        # Deviation for size-class 11																		
-	10.94699667		-10      25          1       0   10.0    20.00        # Deviation for size-class 12																		
-	11.06167971		-10      25          1       0   10.0    20.00        # Deviation for size-class 13																		
-	10.85205937		-10      25          1       0   10.0    20.00        # Deviation for size-class 14																		
-	9.551569672		-10      25          1       0   10.0    20.00        # Deviation for size-class 15																		
-	8.254582019		-10      25          1       0   10.0    20.00        # Deviation for size-class 16																		
-	7.234295764		-10      25          1       0   10.0    20.00        # Deviation for size-class 17																		
-	6.524700274		-10      25          1       0   10.0    20.00        # Deviation for size-class 18																		
-	6.02721532		-10      25          1       0   10.0    20.00        # Deviation for size-class 19																		
-	5.666548799		-10      25          1       0   10.0    20.00        # Deviation for size-class 20																		
-	5.416881624		-10      25          1       0   10.0    20.00        # Deviation for size-class 21																		
-	5.28777817		-10      25          1       0   10.0    20.00        # Deviation for size-class 22																		
-	1.727361634		-10      25          1       0   10.0    20.00        # Deviation for size-class 1	# immature males																	
-	3.206456699		-10      25          1       0   10.0    20.00        # Deviation for size-class 2																		
-	4.685547802		-10      25          1       0   10.0    20.00        # Deviation for size-class 3																		
-	6.164581695		-10      25          1       0   10.0    20.00        # Deviation for size-class 4																		
-	7.642779809		-10      25          1       0   10.0    20.00        # Deviation for size-class 5																		
-	9.10796619		-10      25          1       0   10.0    20.00        # Deviation for size-class 6																		
-	10.33812313		-10      25          1       0   10.0    20.00        # Deviation for size-class 7																		
-	11.17848667		-10      25          1       0   10.0    20.00        # Deviation for size-class 8																		
-	11.63093177		-10      25          1       0   10.0    20.00        # Deviation for size-class 9																		
-	11.81913935		-10      25          1       0   10.0    20.00        # Deviation for size-class 10																		
-	11.85906455		-10      25          1       0   10.0    20.00        # Deviation for size-class 11																		
-	11.83125651		-10      25          1       0   10.0    20.00        # Deviation for size-class 12																		
-	11.80159579		-10      25          1       0   10.0    20.00        # Deviation for size-class 13																		
-	11.75951306		-10      25          1       0   10.0    20.00        # Deviation for size-class 14																		
-	11.60789552		-10      25          1       0   10.0    20.00        # Deviation for size-class 15																		
-	11.27508852		-10      25          1       0   10.0    20.00        # Deviation for size-class 16																		
-	10.61754237		-10      25          1       0   10.0    20.00        # Deviation for size-class 17																		
-	9.712323572		-10      25          1       0   10.0    20.00        # Deviation for size-class 18																		
-	8.643169363		-10      25          1       0   10.0    20.00        # Deviation for size-class 19																		
-	7.478394486		-10      25          1       0   10.0    20.00        # Deviation for size-class 20																		
-	6.271837492		-10      25          1       0   10.0    20.00        # Deviation for size-class 21																		
-	5.055197561		-10      25          1       0   10.0    20.00        # Deviation for size-class 22																		
-	-9.899953219	-10      25          1      0   10.0    20.00        # Deviation for size-class 1   # mature females																
-	-9.899953428	-10      25          1      0   10.0    20.00        # Deviation for size-class 2																		
-	-9.899953666	-10      25          1      0   10.0    20.00        # Deviation for size-class 3																		
-	-9.899954061	-10      25          1      0   10.0    20.00        # Deviation for size-class 4																		
-	-9.899954446	-10      25          1      0   10.0    20.00        # Deviation for size-class 5																		
-	-9.899955402	-10      25          1      0   10.0    20.00        # Deviation for size-class 6																		
-	-9.899956222	-10      25          1      0   10.0    20.00        # Deviation for size-class 7																		
-	-9.899957229	-10      25          1      0   10.0    20.00        # Deviation for size-class 8																		
-	-9.899958005	-10      25          1      0   10.0    20.00        # Deviation for size-class 9																		
-	-9.899958097	-10      25          1      0   10.0    20.00        # Deviation for size-class 10																		
-	-9.899958089	-10      25          1      0   10.0    20.00        # Deviation for size-class 11																		
-	-9.899957908	-10      25          1      0   10.0    20.00        # Deviation for size-class 12																		
-	-9.899957908	-10      25          1      0   10.0    20.00        # Deviation for size-class 13																		
-	-9.899957908	-10      25          1      0   10.0    20.00        # Deviation for size-class 14																		
-	-9.899957908	-10      25          1      0   10.0    20.00        # Deviation for size-class 15																		
-	-9.899957908	-10      25          1      0   10.0    20.00        # Deviation for size-class 16																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 17																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 18																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 19																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 20																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 21																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 22																		
-	9.654137656		-10      25          1       0   10.0    20.00        # Deviation for size-class 1  # immature females																		
-	9.791071944		-10      25          1       0   10.0    20.00        # Deviation for size-class 2																		
-	10.21928285		-10      25          1       0   10.0    20.00        # Deviation for size-class 3																		
-	11.27018355		-10      25          1       0   10.0    20.00        # Deviation for size-class 4																		
-	13.06503069		-10      25          1       0   10.0    20.00        # Deviation for size-class 5																		
-	13.89716867		-10      25          1       0   10.0    20.00        # Deviation for size-class 6																		
-	13.34412679		-10      25          1       0   10.0    20.00        # Deviation for size-class 7																		
-	12.42393492		-10      25          1       0   10.0    20.00        # Deviation for size-class 8																		
-	11.48800905		-10      25          1       0   10.0    20.00        # Deviation for size-class 9																		
-	10.05121707		-10      25          1       0   10.0    20.00        # Deviation for size-class 10																		
-	9.079076512		-10      25          1       0   10.0    20.00        # Deviation for size-class 11																		
-	8.658554563		-10      25          1       0   10.0    20.00        # Deviation for size-class 12																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 13																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 14																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 15																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 16																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 17																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 18																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 19																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 20																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 21																		
-	-9.899957908	-10      25          1       0   10.0    20.00        # Deviation for size-class 22																		
+    0.30     	   0.15    0.5         -4       0    0.18    0.04        # M (male)																					
+    0.41     	   0.15    0.5         -4       0    0.18    0.04        # M (female)																					
+   16.5   		  -10        20         -2       0  -10.0    20.0         # logR0																					
+   15.0    		  -10        30         -1       0   10.0    20.0         # logRini, to estimate if NOT initialized at unfished (n68)"																					
+   13.26245375	  -10        30        -1       0   10.0    20.0         # logRbar, to estimate if NOT initialized at unfished      #1"																					
+   11.5    		    7.5     42.5          4       1   32.5     2.25        # recruitment expected value (males or combined)																					
+	4.0	   			0.1       10	     4       0    0.1     5.0         # recruitment scale (variance component) (males or combined)																				
+    0.0    	 	   -10      10          -4       0   0.0     20.00        # recruitment expected value (females)																					
+    0.00   	  	  -10      10 	        -3       0    0.0    20.0         # recruitment scale (variance component) (females)																				
+   -0.9    	 	  -10         0.75      -4       0  -10.0     0.75        # ln(sigma_R)																					
+    0.75 	        0.20      1.00      -2       3    3.0     2.00        # steepness																					
+    0.01    	    0.0001    1.00      -3       3    1.01    1.01        # recruitment autocorrelation																					
+    13.52117658  	-10      25          -1       0   10.0    20.00        # Deviation for size-class 1 (normalization class)																					
+	12.74579678		-10      25          -1       0   10.0    20.00        # Deviation for size-class 2	# mature males																	
+	12.43900121		-10      25          -1       0   10.0    20.00        # Deviation for size-class 3																		
+	12.37540847		-10      25          -1       0   10.0    20.00        # Deviation for size-class 4																		
+	12.40797545		-10      25          -1       0   10.0    20.00        # Deviation for size-class 5																		
+	12.33589718		-10      25          -1       0   10.0    20.00        # Deviation for size-class 6																		
+	12.14775325		-10      25          -1       0   10.0    20.00        # Deviation for size-class 7																		
+	11.88102472		-10      25          -1       0   10.0    20.00        # Deviation for size-class 8																		
+	11.74339277		-10      25          -1       0   10.0    20.00        # Deviation for size-class 9																		
+	11.6203129		-10      25          -1       0   10.0    20.00        # Deviation for size-class 10																		
+	11.24054823		-10      25          -1       0   10.0    20.00        # Deviation for size-class 11																		
+	10.94699667		-10      25          -1       0   10.0    20.00        # Deviation for size-class 12																		
+	11.06167971		-10      25          -1       0   10.0    20.00        # Deviation for size-class 13																		
+	10.85205937		-10      25          -1       0   10.0    20.00        # Deviation for size-class 14																		
+	9.551569672		-10      25          -1       0   10.0    20.00        # Deviation for size-class 15																		
+	8.254582019		-10      25          -1       0   10.0    20.00        # Deviation for size-class 16																		
+	7.234295764		-10      25          -1       0   10.0    20.00        # Deviation for size-class 17																		
+	6.524700274		-10      25          -1       0   10.0    20.00        # Deviation for size-class 18																		
+	6.02721532		-10      25          -1       0   10.0    20.00        # Deviation for size-class 19																		
+	5.666548799		-10      25          -1       0   10.0    20.00        # Deviation for size-class 20																		
+	5.416881624		-10      25          -1       0   10.0    20.00        # Deviation for size-class 21																		
+	5.28777817		-10      25          -1       0   10.0    20.00        # Deviation for size-class 22																		
+	1.727361634		-10      25          -1       0   10.0    20.00        # Deviation for size-class 1	# immature males																	
+	3.206456699		-10      25          -1       0   10.0    20.00        # Deviation for size-class 2																		
+	4.685547802		-10      25          -1       0   10.0    20.00        # Deviation for size-class 3																		
+	6.164581695		-10      25          -1       0   10.0    20.00        # Deviation for size-class 4																		
+	7.642779809		-10      25          -1       0   10.0    20.00        # Deviation for size-class 5																		
+	9.10796619		-10      25          -1       0   10.0    20.00        # Deviation for size-class 6																		
+	10.33812313		-10      25          -1       0   10.0    20.00        # Deviation for size-class 7																		
+	11.17848667		-10      25          -1       0   10.0    20.00        # Deviation for size-class 8																		
+	11.63093177		-10      25          -1       0   10.0    20.00        # Deviation for size-class 9																		
+	11.81913935		-10      25          -1       0   10.0    20.00        # Deviation for size-class 10																		
+	11.85906455		-10      25          -1       0   10.0    20.00        # Deviation for size-class 11																		
+	11.83125651		-10      25          -1       0   10.0    20.00        # Deviation for size-class 12																		
+	11.80159579		-10      25          -1       0   10.0    20.00        # Deviation for size-class 13																		
+	11.75951306		-10      25          -1       0   10.0    20.00        # Deviation for size-class 14																		
+	11.60789552		-10      25          -1       0   10.0    20.00        # Deviation for size-class 15																		
+	11.27508852		-10      25          -1       0   10.0    20.00        # Deviation for size-class 16																		
+	10.61754237		-10      25          -1       0   10.0    20.00        # Deviation for size-class 17																		
+	9.712323572		-10      25          -1       0   10.0    20.00        # Deviation for size-class 18																		
+	8.643169363		-10      25          -1       0   10.0    20.00        # Deviation for size-class 19																		
+	7.478394486		-10      25          -1       0   10.0    20.00        # Deviation for size-class 20																		
+	6.271837492		-10      25          -1       0   10.0    20.00        # Deviation for size-class 21																		
+	5.055197561		-10      25          -1       0   10.0    20.00        # Deviation for size-class 22																		
+	-9.899953219	-10      25          -1      0   10.0    20.00        # Deviation for size-class 1   # mature females																
+	-9.899953428	-10      25          -1      0   10.0    20.00        # Deviation for size-class 2																		
+	-9.899953666	-10      25          -1      0   10.0    20.00        # Deviation for size-class 3																		
+	-9.899954061	-10      25          -1      0   10.0    20.00        # Deviation for size-class 4																		
+	-9.899954446	-10      25          -1      0   10.0    20.00        # Deviation for size-class 5																		
+	-9.899955402	-10      25          -1      0   10.0    20.00        # Deviation for size-class 6																		
+	-9.899956222	-10      25          -1      0   10.0    20.00        # Deviation for size-class 7																		
+	-9.899957229	-10      25          -1      0   10.0    20.00        # Deviation for size-class 8																		
+	-9.899958005	-10      25          -1      0   10.0    20.00        # Deviation for size-class 9																		
+	-9.899958097	-10      25          -1      0   10.0    20.00        # Deviation for size-class 10																		
+	-9.899958089	-10      25          -1      0   10.0    20.00        # Deviation for size-class 11																		
+	-9.899957908	-10      25          -1      0   10.0    20.00        # Deviation for size-class 12																		
+	-9.899957908	-10      25          -1      0   10.0    20.00        # Deviation for size-class 13																		
+	-9.899957908	-10      25          -1      0   10.0    20.00        # Deviation for size-class 14																		
+	-9.899957908	-10      25          -1      0   10.0    20.00        # Deviation for size-class 15																		
+	-9.899957908	-10      25          -1      0   10.0    20.00        # Deviation for size-class 16																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 17																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 18																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 19																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 20																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 21																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 22																		
+	9.654137656		-10      25          -1       0   10.0    20.00        # Deviation for size-class 1  # immature females																		
+	9.791071944		-10      25          -1       0   10.0    20.00        # Deviation for size-class 2																		
+	10.21928285		-10      25          -1       0   10.0    20.00        # Deviation for size-class 3																		
+	11.27018355		-10      25          -1       0   10.0    20.00        # Deviation for size-class 4																		
+	13.06503069		-10      25          -1       0   10.0    20.00        # Deviation for size-class 5																		
+	13.89716867		-10      25          -1       0   10.0    20.00        # Deviation for size-class 6																		
+	13.34412679		-10      25          -1       0   10.0    20.00        # Deviation for size-class 7																		
+	12.42393492		-10      25          -1       0   10.0    20.00        # Deviation for size-class 8																		
+	11.48800905		-10      25          -1       0   10.0    20.00        # Deviation for size-class 9																		
+	10.05121707		-10      25          -1       0   10.0    20.00        # Deviation for size-class 10																		
+	9.079076512		-10      25          -1       0   10.0    20.00        # Deviation for size-class 11																		
+	8.658554563		-10      25          -1       0   10.0    20.00        # Deviation for size-class 12																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 13																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 14																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 15																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 16																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 17																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 18																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 19																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 20																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 21																		
+	-9.899957908	-10      25          -1       0   10.0    20.00        # Deviation for size-class 22																		
 #	weight-at-length input	method	(1 = allometry	"[w_l = a*l^b],"	2 = vector by sex)																
 2																					
 ##	Males																				
@@ -360,7 +360,7 @@
 ## PENALTIES FOR AVERAGE FISHING MORTALITY RATE FOR EACH GEAR																					
 ## ———————————————————————————————————————————————————————————————————————————————————— ##																					
 ## Mean_F   Female Offset STD_PHZ1   STD_PHZ2   PHZ_M   PHZ_F																					
-   1           0.0505      0.5      45.50      1       1     -12      4    -10   2.95     -10    10  # Pot
+   1           0.0505      0.5      45.50      1       1     -12      4    -10     10     -10    10  # Pot
    0.018       1.0   	   0.5      45.50      1      -1     -12      4    -10     10     -10    10   # Trawl
    0.00        0.0    	   2.0      20.00     -1      -1     -12      4    -10     10     -10    10   # NMFS trawl survey (0 catch)
 ## ———————————————————————————————————————————————————————————————————————————————————— ##																					
@@ -426,7 +426,7 @@
 ## ———————————————————————————————————————————————————————————————————————————————————— ##																					
 1982       # First rec_dev																					
 2018       # last rec_dev																					
-   2       # Estimated rec_dev phase	
+   1       # Estimated rec_dev phase	
    -2	   # Estimated sex_ratio phase
   0.5 	   # Initial sex ratio
   -3       # Estimated rec_ini phase																					
