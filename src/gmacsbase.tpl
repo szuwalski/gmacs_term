@@ -1806,6 +1806,27 @@ DATA_SECTION
    }
  END_CALCS
 
+  // maturity specific natural mortality
+  init_int m_maturity;
+  int n_mat_m;
+  !! n_mat_m = nsex;
+  
+  vector m_mat_ival(1,n_mat_m);
+  vector m_mat_lb(1,n_mat_m);
+  vector m_mat_ub(1,n_mat_m);
+  ivector m_mat_phz(1,n_mat_m);
+ 
+ LOC_CALCS
+  if(m_maturity == 1)
+  {
+   for (int I = 1; I <=n_mat_m; I++)
+   {
+    *(ad_comm::global_datafile) >> m_mat_ival(I) >> m_mat_lb(I)>> m_mat_ub(I) >> m_mat_phz(I);
+     gmacs_ctl << "# " << "#M_mat_parameters" << "\n" << " " << m_mat_ival(I) << " " << m_mat_lb(I) << " " << m_mat_ub(I) << " " << m_mat_phz(I)  << endl;
+    }
+  }
+ END_CALCS
+ 
   // |---------------------------------------------------------|
   // | OTHER CONTROLS                                          |
   // |---------------------------------------------------------|
@@ -2064,6 +2085,7 @@ DATA_SECTION
   if (rdv_phz > 0) NVarPar += (rdv_eyr-rdv_syr+1);
   if (rec_prop_phz > 0) NVarPar += (rdv_eyr-rdv_syr+1);
   for (Ipar=1;Ipar<=nMdev; Ipar++) if (Mdev_phz(Ipar) > 0) NVarPar += 1;
+  for (Ipar=1;Ipar<=n_mat_m; Ipar++) if (m_mat_phz(Ipar) > 0) NVarPar += 1;
   for (Ipar=1;Ipar<=nSizeComps; Ipar++) if (nvn_phz(Ipar) > 0) NVarPar += 1;
   for (Ipar=1;Ipar<=nSurveys; Ipar++) if (q_phz(Ipar) > 0) NVarPar += 1;
   for (Ipar=1;Ipar<=nSurveys; Ipar++) if (cv_phz(Ipar) > 0) NVarPar += 1;
@@ -2085,16 +2107,16 @@ DATA_SECTION
 // ================================================================================================
 
 INITIALIZATION_SECTION
-  // theta               theta_ival;
-  // Grwth               Grwth_ival;
-  // Asymret             AsympSel_ival
-  // log_fbar            log_pen_fbar;
-  // log_vn              log_nvn_ival;
-  // survey_q            q_ival;
-  // logit_rec_prop_est  init_sex_ratio;
-  // log_add_cv          log_add_cv_ival;
-  // m_dev_est           Mdev_ival;
-  // log_slx_pars        log_slx_pars_init
+   theta               theta_ival;
+   Grwth               Grwth_ival;
+   Asymret             AsympSel_ival
+   log_fbar            log_pen_fbar;
+   log_vn              log_nvn_ival;
+   survey_q            q_ival;
+   logit_rec_prop_est  init_sex_ratio;
+   log_add_cv          log_add_cv_ival;
+   m_dev_est           Mdev_ival;
+   log_slx_pars        log_slx_pars_init
 
 // ================================================================================================
 
@@ -2238,6 +2260,11 @@ PARAMETER_SECTION
   vector Msize(1,nclass);
   !! ECHO(Msize);
 
+  // maturity specific natural mortality multipliers
+   init_bounded_number_vector m_mat_mult(1,nsex,m_mat_lb,m_mat_ub,m_mat_phz);      ///> natural mortality deviations
+  !! ECHO(m_mat_mult);
+
+  
   // Effective sample size parameter for multinomial
   init_number_vector log_vn(1,nSizeComps,nvn_phz);
   !! ECHO(log_vn);
@@ -2306,16 +2333,16 @@ PARAMETER_SECTION
   4darray log_slx_discard(1,nfleet,1,nsex,syr,nyrRetro+1,1,nclass);       ///> probabilty of disards
   3darray log_high_grade(1,nfleet,1,nsex,syr,nyrRetro+1);                 ///> high-grading fraction
 
-  3darray M(1,nsex,syr,nyrRetro,1,nclass);                      ///> Natural mortality
+  4darray M(1,nsex,1,nmature,syr,nyrRetro,1,nclass);                      ///> Natural mortality
   vector Mmult(1,nclass);                                       ///> size-class-specific multiplier
   matrix fout(1,nfleet,syr,nyrRetro);                           ///> Fishing mortality output
   vector finit(1,nfleet);                                       ///> Initial F
   4darray ft(1,nfleet,1,nsex,syr,nyrRetro,1,nseason);           ///> Fully-selected fishing mortality by gear
   4darray F(1,nsex,syr,nyrRetro,1,nseason,1,nclass);            ///> Fishing mortality actual
   4darray F2(1,nsex,syr,nyrRetro,1,nseason,1,nclass);           ///> Fishing mortality with full selection
-  4darray Z(1,nsex,syr,nyrRetro,1,nseason,1,nclass);            ///> Total mortality actual
-  4darray Z2(1,nsex,syr,nyrRetro,1,nseason,1,nclass);           ///> Total mortality with full selection
-  5darray S(1,nsex,syr,nyrRetro,1,nseason,1,nclass,1,nclass);   ///> Surival Rate (S=exp(-Z))
+  5darray Z(1,nsex,1,nmature,syr,nyrRetro,1,nseason,1,nclass);            ///> Total mortality actual
+  5darray Z2(1,nsex,1,nmature,syr,nyrRetro,1,nseason,1,nclass);           ///> Total mortality with full selection
+  6darray S(1,nsex,1,nmature,syr,nyrRetro,1,nseason,1,nclass,1,nclass);   ///> Surival Rate (S=exp(-Z))
 
   4darray d4_N(1,n_grp,syr,nyrRetro+1,1,nseason,1,nclass);      ///> Numbers-at-sex/mature/shell/year/season/length.
   3darray d3_newShell(1,nsex,syr,nyrRetro+1,1,nclass);          ///> New shell crabs-at-length.
@@ -2588,7 +2615,6 @@ PROCEDURE_SECTION
    calc_selectivities();                                   if ( verbose >= 3 ) cout << "Ok after calc_selectivities ..." << endl;
   else
    if ( verbose >= 3 ) cout << "Ok after ignoring selex calculation..." << endl;
-
   calc_fishing_mortality();                                if ( verbose >= 3 ) cout << "Ok after calc_fishing_mortality ..." << endl;
   calc_natural_mortality();                                if ( verbose >= 3 ) cout << "Ok after calc_natural_mortality ..." << endl;
   calc_total_mortality();                                  if ( verbose >= 3 ) cout << "Ok after calc_total_mortality ..." << endl;
@@ -3021,7 +3047,7 @@ FUNCTION calc_selectivities
        j++;
        p2 = mfexp(log_slx_pars(j));
        j++;
-       ((gsm::LogisticCurve95<dvar_vector,dvariable>*) ppSLX[k-1])->SetParams(p1,p2);
+       ((gsm::LogisticCurve<dvar_vector,dvariable>*) ppSLX[k-1])->SetParams(p1,p2);
        pSLX = ppSLX[k-1];
        break;
       case SELEX_5095LOGISTIC:                             ///> logistic95
@@ -3101,8 +3127,8 @@ FUNCTION calc_selectivities
         if ( slx_gear(k) > 0 )                                            ///> capture selectvity
          {
           log_slx_capture(kk,h,i) = pSLX->logSelectivity(dvar_mid_points);
-          if (slx_type(k)==SELEX_PARAMETRIC || slx_type(k)==SELEX_COEFFICIENTS || slx_type(k)==SELEX_STANLOGISTIC || slx_type(k)==SELEX_5095LOGISTIC)
-           log_slx_capture(kk,h,i) -= log_slx_capture(kk,h,i,nclass);
+          //if (slx_type(k)==SELEX_PARAMETRIC || slx_type(k)==SELEX_COEFFICIENTS || slx_type(k)==SELEX_STANLOGISTIC || slx_type(k)==SELEX_5095LOGISTIC)
+           //log_slx_capture(kk,h,i) -= log_slx_capture(kk,h,i,nclass);
           //cout << kk << " " << h << " " << i << " " << slx_type(k) << " " << log_slx_capture(kk,h,i) << " " << exp(log_slx_capture(kk,h,i)) << endl;
          }
         else                                                              ///> discard (because the gear is NEGATIVE)
@@ -3239,10 +3265,13 @@ FUNCTION calc_natural_mortality
   dvar_vector delta(syr+1,nyrRetro);
 
   // Sex
+  for( int m = 1; m <= nmature; m++)
   for (int h=1;h<=nsex;h++)
    {
-    M(h) = M0(h);
-
+    M(h,m) = M0(h);
+	// adjusts for maturity specific natural mortality (immature gets a multplier)
+    if(m_maturity==1 & m==2)
+	 M(h,m) = M0(h) * mfexp(m_mat_mult(h));
     delta.initialize();
     switch( m_type )
      {
@@ -3269,29 +3298,29 @@ FUNCTION calc_natural_mortality
       {
        // Is this syntax for split sex?
        for ( int i = m_nodeyear_sex(h,1+(idev-1)*2); i <= m_nodeyear_sex(h,2+(idev-1)*2); i++ )
-        M(h)(i) = mfexp(m_dev_sex(h,idev));
+        M(h,m)(i) = mfexp(m_dev_sex(h,idev));
       }
      break;
     // Case for specific years
     case M_TIME_BLOCKS3: // time blocks
      for ( int idev = 1; idev <= nMdev_par_cnt(h); idev++ ) delta(m_nodeyear_sex(h,idev)) = m_dev_sex(1,idev);
      for ( int i = syr+1; i <= nyrRetro; i++ )
-       M(h)(h) = M(h)(syr) * mfexp(delta(i)); // Deltas are devs from base value (not a walk)
+       M(h,m)(h) = M(h,m)(syr) * mfexp(delta(i)); // Deltas are devs from base value (not a walk)
      break;
     case M_TIME_BLOCKS2: // time blocks
      for ( int idev = 1; idev <= nMdev_par_cnt(h)-1; idev++ )
       {
        for ( int i = m_nodeyear_sex(h,idev); i < m_nodeyear_sex(h,idev+1); i++ )
-         M(h)(i) = M(h)(i)*mfexp(m_dev_sex(h,idev));
+         M(h,m)(i) = M(h,m)(i)*mfexp(m_dev_sex(h,idev));
       }
      break;
     }
    // Update M by year.
    if ( m_type < 4 )
-    for ( int i = syr+1; i <= nyrRetro; i++ ) M(h)(i) = M(h)(i-1) * mfexp(delta(i));
+    for ( int i = syr+1; i <= nyrRetro; i++ ) M(h,m)(i) = M(h,m)(i-1) * mfexp(delta(i));
 
    for (int i = syr; i <= nyrRetro; i++)                                  ///> Account for size-specific M
-    for (int l=1;l<=nclass;l++)  M(h,i,l) *= Mmult(l);
+    for (int l=1;l<=nclass;l++)  M(h,m,i,l) *= Mmult(l);
   }
 
 // --------------------------------------------------------------------------------------------------------------------------------------
@@ -3308,15 +3337,15 @@ FUNCTION calc_natural_mortality
 
 FUNCTION calc_total_mortality
   Z.initialize(); Z2.initialize();S.initialize();
-
+ for( int m = 1; m <= nmature; m++)
   for ( int h = 1; h <= nsex; h++ )
    for ( int i = syr; i <= nyrRetro; i++ )
     for ( int j = 1; j <= nseason; j++ )
      {
-      Z(h,i,j) = m_prop(i,j) * M(h,i) + F(h,i,j);
-      Z2(h,i,j) = m_prop(i,j) * M(h,i) + F2(h,i,j);
-      if (season_type(j) == 0) for ( int l = 1; l <= nclass; l++ ) S(h,i,j)(l,l) = 1.0-Z(h,i,j,l)/Z2(h,i,j,l)*(1.0-mfexp(-Z2(h,i,j,l)));
-      if (season_type(j) == 1) for ( int l = 1; l <= nclass; l++ ) S(h,i,j)(l,l) = mfexp(-Z(h,i,j,l));
+      Z(h,m,i,j) = m_prop(i,j) * M(h,m,i) + F(h,i,j);
+      Z2(h,m,i,j) = m_prop(i,j) * M(h,m,i) + F2(h,i,j);
+      if (season_type(j) == 0) for ( int l = 1; l <= nclass; l++ ) S(h,m,i,j)(l,l) = 1.0-Z(h,m,i,j,l)/Z2(h,m,i,j,l)*(1.0-mfexp(-Z2(h,m,i,j,l)));
+      if (season_type(j) == 1) for ( int l = 1; l <= nclass; l++ ) S(h,m,i,j)(l,l) = mfexp(-Z(h,m,i,j,l));
      }
 
 // =======================================================================================================================================
@@ -3951,7 +3980,7 @@ FUNCTION update_population_numbers_at_length
 
        x = d4_N(ig)(i)(j);
        // Mortality (natural and fishing)
-       x = x * S(h)(i)(j);
+       x = x * S(h,m)(i)(j);
        if ( nshell == 1 )
         {
 		if(nmature == 1)
@@ -4092,13 +4121,16 @@ FUNCTION calc_predicted_catch
              nal.initialize();                                        ///> Computer numbers
              for ( int m = 1; m <= nmature; m++ )
               for ( int o = 1; o <= nshell; o++ )
-               { int ig = pntr_hmo(h,m,o); nal += d4_N(ig,i,j); }
-             nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
-             tmp_ft = ft(k,h,i,j);
+               { 
+		        int ig = pntr_hmo(h,m,o); 
+			    nal = d4_N(ig,i,j); 
+                nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
+                tmp_ft = ft(k,h,i,j);
 
-             if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,i,j); else tempZ1 = Z(h,i,j);
-             totalnalobs += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
-             totalnalpre += nal * elem_div(elem_prod(effort * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+                if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,m,i,j); else tempZ1 = Z(h,m,i,j);
+                totalnalobs += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+                totalnalpre += nal * elem_div(elem_prod(effort * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+			}
             }
            log_q_catch(kk) += log(totalnalobs / totalnalpre);
            nhit += 1;
@@ -4147,16 +4179,19 @@ FUNCTION calc_predicted_catch
          nal.initialize();                                            ///> Computer numbers
          for ( int m = 1; m <= nmature; m++ )
           for ( int o = 1; o <= nshell; o++ )
-           { int ig = pntr_hmo(h,m,o); nal += d4_N(ig,i,j); }
-         nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
-         if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,i,j); else tempZ1 = Z(h,i,j);
+           { 
+	        int ig = pntr_hmo(h,m,o); 
+			 nal = d4_N(ig,i,j); 
+             nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
+            if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,m,i,j); else tempZ1 = Z(h,m,i,j);
  
-         // predict catch
-         tmp_ft = ft(k,h,i,j);                                       /// > Extract F
-         pre_catch(kk,jj) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
-         if (cobs == 0 & effort > 0.0)
-          obs_catch_effort(kk,jj) += nal * elem_div(elem_prod(mfexp(log_q_catch(kk)) * effort * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
-        }
+			// predict catch
+			tmp_ft = ft(k,h,i,j);                                       /// > Extract F
+			pre_catch(kk,jj) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+			if (cobs == 0 & effort > 0.0)
+			obs_catch_effort(kk,jj) += nal * elem_div(elem_prod(mfexp(log_q_catch(kk)) * effort * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+			}
+		}
        else  // sexes combined
         {
          for ( h = 1; h <= nsex; h++ )
@@ -4178,15 +4213,18 @@ FUNCTION calc_predicted_catch
            nal.initialize();
            for ( int m = 1; m <= nmature; m++ )
             for ( int o = 1; o <= nshell; o++ )
-             { int ig = pntr_hmo(h,m,o);  nal += d4_N(ig,i,j); }
-           nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
+             { 
+		      int ig = pntr_hmo(h,m,o);
+			  nal = d4_N(ig,i,j); 
+              nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
 
-           tmp_ft = ft(k,h,i,j);                                      /// > Extract F
-           if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,i,j); else tempZ1 = Z(h,i,j);
-           pre_catch(kk,jj) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
-           if (cobs == 0 & effort > 0.0)
-            obs_catch_effort(kk,jj) +=  nal * elem_div(elem_prod(mfexp(log_q_catch(kk)) * effort * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
-          }
+			 tmp_ft = ft(k,h,i,j);                                      /// > Extract F
+			 if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,m,i,j); else tempZ1 = Z(h,m,i,j);
+			 pre_catch(kk,jj) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+			 if (cobs == 0 & effort > 0.0)
+				obs_catch_effort(kk,jj) +=  nal * elem_div(elem_prod(mfexp(log_q_catch(kk)) * effort * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+            }
+		  }
         } // sex-specific
  
        // Catch residuals
@@ -4235,14 +4273,18 @@ FUNCTION dvariable calc_predicted_catch_det(const int i, const int j, const int 
     }
 
   nal.initialize();
+  out.initialize();
   for ( int m = 1; m <= nmature; m++ )
    for ( int o = 1; o <= nshell; o++ )
-    { int ig = pntr_hmo(h,m,o); nal += d4_N(ig,i,j); }
-  nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
+    { 
+	int ig = pntr_hmo(h,m,o);
+	nal = d4_N(ig,i,j); 
+	nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
 
-  tmp_ft = ft(k,h,i,j);                                              /// > Extract F
-  if (season_type(j) == INSTANT_F) tempZ1 = Z2(h,i,j); else tempZ1 = Z(h,i,j);
-  out = nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+	tmp_ft = ft(k,h,i,j);                                              /// > Extract F
+	if (season_type(j) == INSTANT_F) tempZ1 = Z2(h,m,i,j); else tempZ1 = Z(h,m,i,j);
+	out += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+	}
   return(out);
  }
 
@@ -4289,12 +4331,15 @@ FUNCTION calc_predicted_catch_out
         nal.initialize();
         for ( int m = 1; m <= nmature; m++ )
          for ( int o = 1; o <= nshell; o++ )
-          { int ig = pntr_hmo(h,m,o); nal += d4_N(ig,i,j); }
+          { 
+			int ig = pntr_hmo(h,m,o); 
+			nal = d4_N(ig,i,j); 
 
-        tmp_ft = ft(k,h,i,j);
-        nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
-        if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,i,j); else tempZ1 = Z(h,i,j)+1.0e-10;
-        pre_catch_out(kk,i) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+			tmp_ft = ft(k,h,i,j);
+			nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
+			if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,m,i,j); else tempZ1 = Z(h,m,i,j)+1.0e-10;
+			pre_catch_out(kk,i) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+	      }
        }
       else
        {
@@ -4319,12 +4364,15 @@ FUNCTION calc_predicted_catch_out
           nal.initialize();
           for ( int m = 1; m <= nmature; m++ )
            for ( int o = 1; o <= nshell; o++ )
-            { int ig = pntr_hmo(h,m,o); nal += d4_N(ig,i,j); }
-          nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
+            {
+				int ig = pntr_hmo(h,m,o);
+				nal = d4_N(ig,i,j); 
+				nal = (unit == 1) ? elem_prod(nal, mean_wt(h,i)) : nal;
 
-          tmp_ft = ft(k,h,i,j);
-          if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,i,j); else tempZ1 = Z(h,i,j);
-          pre_catch_out(kk,i) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+				tmp_ft = ft(k,h,i,j);
+				if (season_type(j)==INSTANT_F) tempZ1 = Z2(h,m,i,j); else tempZ1 = Z(h,m,i,j);
+					pre_catch_out(kk,i) += nal * elem_div(elem_prod(tmp_ft * sel, 1.0 - mfexp(-tempZ1)), tempZ1);
+			}
           //out2 += calc_predicted_catch_det(i, j, h, k, type, unit);
          } // h
        } // sex
@@ -4666,7 +4714,7 @@ FUNCTION calc_stock_recruitment_relationship
   _S.initialize();
   for( int h = 1; h <= nsex; h++ )
    {
-    for ( int l = 1; l <= nclass; ++l )  _S(l,l) = mfexp(-M(h)(syr)(l));
+    for ( int l = 1; l <= nclass; ++l )  _S(l,l) = mfexp(-M(h,1)(syr)(l));
     _A = growth_transition(h,1);
     dvar_vector x(1,nclass);
     dvar_vector y(1,nclass);
@@ -5357,8 +5405,8 @@ FUNCTION dvar_matrix calc_brute_equilibrium(const int YrRefSexR1, const int YrRe
   for ( int h = 1; h <= nsex; h++ )
    for ( int j = 1; j <= nseason; j++ )
     {
-     ZZ1(h,j) = (m_prop(YrRef,j) * M(h,YrRef)) + FF1(h,j);
-     ZZ2(h,j) = (m_prop(YrRef,j) * M(h,YrRef)) + FF2(h,j);
+     ZZ1(h,j) = (m_prop(YrRef,j) * M(h,1,YrRef)) + FF1(h,j);
+     ZZ2(h,j) = (m_prop(YrRef,j) * M(h,1,YrRef)) + FF2(h,j);
      if (season_type(j) == 0) for ( int l = 1; l <= nclass; l++ ) SS(h,j)(l,l) = 1.0-ZZ1(h,j,l)/ZZ2(h,j,l)*(1.0-mfexp(-ZZ2(h,j,l)));
      if (season_type(j) == 1) for ( int l = 1; l <= nclass; l++ ) SS(h,j)(l,l) = mfexp(-ZZ1(h,j,l));
     }
@@ -5798,8 +5846,8 @@ FUNCTION dvar4_array project_one_year(const int i, const int iproj, const int Yr
   for ( int h = 1; h <= nsex; h++ )
    for ( int j = 1; j <= nseason; j++ )
     {
-     _Z1(h,j) = (m_prop(YrRef,j) * M(h,YrRef)) + _F1(h,j);
-     _Z2(h,j) = (m_prop(YrRef,j) * M(h,YrRef)) + _F2(h,j);
+     _Z1(h,j) = (m_prop(YrRef,j) * M(h,1,YrRef)) + _F1(h,j);
+     _Z2(h,j) = (m_prop(YrRef,j) * M(h,1,YrRef)) + _F2(h,j);
      if (season_type(j) == 0) for ( int l = 1; l <= nclass; l++ ) _S(h,j)(l,l) = 1.0-_Z1(h,j,l)/_Z2(h,j,l)*(1.0-mfexp(-_Z2(h,j,l)));
      if (season_type(j) == 1) for ( int l = 1; l <= nclass; l++ ) _S(h,j)(l,l) = mfexp(-_Z1(h,j,l));
     }
@@ -6071,8 +6119,8 @@ FUNCTION dvar_vector project_biomass_OFL(const int YrRef, const int iproj, dvar_
   for ( int h = 1; h <= nsex; h++ )
    for ( int j = 1; j <= nseason; j++ )
     {
-     _Z1(h)(j) = (m_prop(YrRef,j) * M(h,YrRef)) + _F1(h,j);
-     _Z2(h)(j) = (m_prop(YrRef,j) * M(h,YrRef)) + _F2(h,j);
+     _Z1(h)(j) = (m_prop(YrRef,j) * M(h,1,YrRef)) + _F1(h,j);
+     _Z2(h)(j) = (m_prop(YrRef,j) * M(h,1,YrRef)) + _F2(h,j);
      if (season_type(j) == 0) for ( int l = 1; l <= nclass; l++ ) _S(h,j)(l,l) = 1.0-_Z1(h,j,l)/_Z2(h,j,l)*(1.0-mfexp(-_Z2(h,j,l)));
      if (season_type(j) == 1) for ( int l = 1; l <= nclass; l++ ) _S(h,j)(l,l) = mfexp(-_Z1(h,j,l));
     }
@@ -7076,15 +7124,17 @@ FUNCTION CreateOutput
   OutFile1 << "#Total mortality by size-class (continuous)" << endl;
   OutFile1 << "# Sex Year Season Total_mortality" << endl;
   for (int h=1;h<=nsex;h++)
-   for (int i=syr;i<=nyrRetro;i++)
-    for (int j=1;j<=nseason;j++)
-     OutFile1 << h << " " << i << " " << j << " " << Z(h,i,j) << endl;
+   for(int m=1;m<=n_mat_m;m++)
+    for (int i=syr;i<=nyrRetro;i++)
+     for (int j=1;j<=nseason;j++)
+      OutFile1 << h << " " << m << " " << i << " " << j << " " << Z(h,m,i,j) << endl;
   OutFile1 << "#Total mortality by size-class (discrete)" << endl;
   OutFile1 << "# Sex Year Season Total_mortality" << endl;
   for (int h=1;h<=nsex;h++)
-   for (int i=syr;i<=nyrRetro;i++)
-    for (int j=1;j<=nseason;j++)
-     OutFile1 << h << " " << i << " " << j << " " << Z2(h,i,j) << endl;
+   for( int m=1;m<=n_mat_m;m++)
+	for (int i=syr;i<=nyrRetro;i++)
+     for (int j=1;j<=nseason;j++)
+      OutFile1 << h << " " << m << " " << i << " " << j << " " << Z2(h,m,i,j) << endl;
   OutFile1 << endl;
 
   OutFile1 << "#--------------------------------------------------------------------------------------------" << endl;

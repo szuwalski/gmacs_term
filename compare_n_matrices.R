@@ -133,11 +133,11 @@ M        <- lapply(fn, read_admb) #need .prj file to run gmacs and need .rep fil
 names(M) <- mod_names
 
 #===============================
-# Compare N matrices
+# Compare female N matrices
 #===============================
-names(M[[1]])
-plot(M[[1]]$recruits)
 
+names(M[[1]])
+M[[1]]$N_females_mature
 tot_females<-snowad.rep[[1]]$"Estimated numbers of immature new shell female crab" +                                           
 snowad.rep[[1]]$"Estimated numbers of immature old shell female crab" +                                           
 snowad.rep[[1]]$"Estimated numbers of mature new shell female crab" +                                             
@@ -151,10 +151,57 @@ for(x in 1:nrow(tot_females))
 {
   plot(M[[1]]$N_females[x,],type='l',lty=2,xaxt='n',yaxt='n')
   lines(tot_females[x,2:ncol(tot_males)],lty=3,col=2)
+  legend('topright',bty='n',legend=seq(1982,2019)[x])
+  abline(v=10,lty=3)
 }
 plot.new()
 legend('center',bty='n',col=c(1,2),pch=16,legend=c("GMACS","Jack"))
 mtext(side=3,"Total female numbers at length (predicted)",outer=T)
+
+female_dif<-(M[[1]]$N_females[1:38,1:10] - tot_females[,2:11])/M[[1]]$N_females[1:38,1:10]
+mean(female_dif)
+
+annual_f_n_gmac<-apply(M[[1]]$N_females[1:38,],1,sum)
+annual_f_n_jack<-apply(tot_females[,2:ncol(tot_females)],1,sum)
+
+mean((annual_f_n_gmac-annual_f_n_jack)/annual_f_n_jack)
+
+
+M[[1]]$N_females_mature
+mat_females<- snowad.rep[[1]]$"Estimated numbers of mature new shell female crab" +                                             
+  snowad.rep[[1]]$"Estimated numbers of mature old shell female crab" 
+
+imm_females<- snowad.rep[[1]]$"Estimated numbers of immature new shell female crab" +                                             
+  snowad.rep[[1]]$"Estimated numbers of immature old shell female crab" 
+
+
+par(mfrow=c(8,5),mar=c(.1,.1,.1,.1),oma=c(4,4,1.5,1))
+for(x in 1:nrow(tot_females))
+{
+  plot(mat_females[x,2:ncol(tot_females)],type='l',lty=2,xaxt='n',yaxt='n')
+  lines(M[[1]]$N_females_mature[x,] ,lty=3,col=2)
+  legend('topright',bty='n',legend=seq(1982,2019)[x])
+}
+plot.new()
+legend('center',bty='n',col=c(1,2),pch=16,legend=c("Jack","GMACS"))
+mtext(side=3,"Mature female numbers at length (predicted)",outer=T)
+
+par(mfrow=c(8,5),mar=c(.1,.1,.1,.1),oma=c(4,4,1.5,1))
+for(x in 1:nrow(tot_females))
+{
+  plot(imm_females[x,2:ncol(tot_females)],type='l',lty=2,xaxt='n',yaxt='n')
+  lines(M[[1]]$N_females[x,] - M[[1]]$N_females_mature[x,] ,lty=3,col=2)
+  legend('topright',bty='n',legend=seq(1982,2019)[x])
+}
+plot.new()
+legend('center',bty='n',col=c(1,2),pch=16,legend=c("Jack","GMACS"))
+mtext(side=3,"Immature female numbers at length (predicted)",outer=T)
+
+
+
+#===============================
+# Compare male N matrices
+#===============================
 
 
 tot_males<-snowad.rep[[1]]$"Estimated numbers of immature new shell male crab" +                                           
@@ -167,11 +214,52 @@ for(x in 1:nrow(tot_males))
 {
 plot(M[[1]]$N_males[x,],type='l',lty=2,xaxt='n',yaxt='n')
 lines(tot_males[x,2:ncol(tot_males)],lty=3,col=2)
+legend('topright',bty='n',legend=seq(1982,2019)[x])
+abline(v=15,lty=3)
 }
 plot.new()
 legend('center',bty='n',col=c(1,2),pch=16,legend=c("GMACS","Jack"))
 mtext(side=3,"Total male numbers at length (predicted)",outer=T)
 
-
 male_dif<-(M[[1]]$N_males[1:38,] - tot_males[,2:ncol(tot_males)])/M[[1]]$N_males[1:38,]
 mean(male_dif)
+
+
+
+mat_males<-snowad.rep[[1]]$"Estimated numbers of mature new shell male crab" +                                             
+  snowad.rep[[1]]$"Estimated numbers of mature old shell male crab" 
+
+par(mfrow=c(8,5),mar=c(.1,.1,.1,.1),oma=c(4,4,1.5,1))
+for(x in 1:nrow(tot_males))
+{
+  plot(M[[1]]$N_males_mature[x,],type='l',lty=2,xaxt='n',yaxt='n')
+  lines(mat_males[x,2:ncol(tot_males)],lty=3,col=2)
+  legend('topright',bty='n',legend=seq(1982,2019)[x])
+  abline(v=15,lty=3)
+}
+plot.new()
+legend('center',bty='n',col=c(1,2),pch=16,legend=c("GMACS","Jack"))
+mtext(side=3,"Mature male numbers at length (predicted)",outer=T)
+
+imm_males<-snowad.rep[[1]]$"Estimated numbers of immature new shell male crab" +                                             
+  snowad.rep[[1]]$"Estimated numbers of immature old shell male crab" 
+
+lenbins<-seq(27.5,132.5,5)
+par(mfrow=c(8,5),mar=c(.1,.1,.1,.1),oma=c(4,4,1.5,1))
+for(x in 1:nrow(tot_males))
+{
+  plot(M[[1]]$N_males[x,]-M[[1]]$N_males_mature[x,],type='l',lty=2,xaxt='n',yaxt='n')
+  lines(imm_males[x,2:ncol(tot_males)],lty=3,col=2)
+  legend('topright',bty='n',legend=seq(1982,2019)[x])
+  abline(v=15,lty=3)
+}
+plot.new()
+legend('center',bty='n',col=c(1,2),pch=16,legend=c("GMACS","Jack"))
+mtext(side=3,"Immature male numbers at length (predicted)",outer=T)
+
+
+
+
+imm_male_dif<-((M[[1]]$N_males[1:38,] -M[[1]]$N_males_mature[1:38,] )- imm_males[,2:ncol(tot_males)])/imm_males[,2:ncol(tot_males)]
+mean(imm_male_dif)
+

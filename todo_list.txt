@@ -1,7 +1,56 @@
+WHY IS SELECTIVITY DIFFERENT?
+
+Trawl selectivity is forcing max to 1.
+Fixed this by commenting some code out. 
+Will need to make an option for selectivity that requires that.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Perhaps the retained and total selectivity are reversed from jack's code to gmacs?
+
+Total selectivity is the same-ish.
+Retained is not.
+Trawl is not.
+
+
+Jacks code:
+ all mortality occurs for the year
+ then growth occurs
+ then maturity is evaluated based on those 
+ 
+Why woudl this ake a difference for males and not females?
+ Females are subject to very little F?
+ Timing of male growth can impact how many are available to the fishery?
+ This would explain why a bunch are in GMACS, but not in 
+
+
 rec_sdd (size at recruitment) is close, but not exact (to 3 decimal places) and I do not know why.
+
+Is the bloop for males because of when growth occurs relative to the fishery?
+Or because of when the n matrices are output?
+or is it a selectivity problem?
+
+
+Big changes--standarad logistic selectivity was logistic95 in most recent version of code
+
+Index is mature first! important for natural mortality
 
 Add in for comparison:
  immature/mature natural mortality
+
+ change to 4darray
+ estimate multiplier for immature
+ add estimated parameter
+ change ctl file in the 
+ modify calc_natural_mortality
+
+GOTTA FIX CATCH PREDICTIONS
+Fix M and Z in project one year ahead and stock recruit and OFL and brute equil
+ currently they have the maturity index hard coded to 1 for testing
+
+Calc predicted catch (+ _out) too--search for "Z(" to find instance and make sure they are not hard coded
+
+
+
 
 Add in for fitting:
  different survey q by sex
