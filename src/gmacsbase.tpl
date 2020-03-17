@@ -3020,6 +3020,7 @@ FUNCTION calc_selectivities
   class gsm::Selex<dvar_vector> *pSLX;
 
   // Specify non-mirrored selectivity
+  
   int j = 1;
   for ( int k = 1; k <= nslx; k++ )
    if (slx_type(k) >= 0)
@@ -3127,8 +3128,9 @@ FUNCTION calc_selectivities
         if ( slx_gear(k) > 0 )                                            ///> capture selectvity
          {
           log_slx_capture(kk,h,i) = pSLX->logSelectivity(dvar_mid_points);
-          //if (slx_type(k)==SELEX_PARAMETRIC || slx_type(k)==SELEX_COEFFICIENTS || slx_type(k)==SELEX_STANLOGISTIC || slx_type(k)==SELEX_5095LOGISTIC)
-           //log_slx_capture(kk,h,i) -= log_slx_capture(kk,h,i,nclass);
+		  if(k!=3) // CSS added to match snow crab, comment out when done
+          if (slx_type(k)==SELEX_PARAMETRIC || slx_type(k)==SELEX_COEFFICIENTS || slx_type(k)==SELEX_STANLOGISTIC || slx_type(k)==SELEX_5095LOGISTIC)
+           log_slx_capture(kk,h,i) -= log_slx_capture(kk,h,i,nclass);
           //cout << kk << " " << h << " " << i << " " << slx_type(k) << " " << log_slx_capture(kk,h,i) << " " << exp(log_slx_capture(kk,h,i)) << endl;
          }
         else                                                              ///> discard (because the gear is NEGATIVE)
@@ -3241,7 +3243,8 @@ FUNCTION calc_fishing_mortality
           sel = mfexp(log_slx_capture(k,h,i))+1.0e-10;               ///> Capture selectivity
           ret = mfexp(log_slx_retaind(k,h,i)) * slx_nret(h,k);       ///> Retension
           vul = elem_prod(sel, ret + (1.0 - ret) * xi);              ///> Vulnerability
-          F(h,i,j) += ft(k,h,i,j) * vul;                             ///> Fishing mortality
+          //F(h,i,j) += ft(k,h,i,j) * vul;                             ///> Fishing mortality  CSS commented out to match snow, change back
+          F(h,i,j) += ft(k,h,i,j) * sel;                             ///> Fishing mortality
           F2(h,i,j) += ft(k,h,i,j) * sel;                            ///> Contact mortality
          }
        } // years and seasons
@@ -3512,7 +3515,7 @@ FUNCTION calc_growth_transition
         gt.initialize();
         for ( int l = 1; l <= nSizeSex(h)-1; l++ )
          {
-          mean_size_after_molt =  molt_increment(h,k,l) / gscale(h,k);
+          mean_size_after_molt =  (molt_increment(h,k,l))/ gscale(h,k);
           Accum = 0;
           for ( int ll = l; ll <= nSizeSex(h)-1; ll++ )
            {
@@ -3528,6 +3531,9 @@ FUNCTION calc_growth_transition
        }
      }
 
+	 
+
+	 
     // Set the growth-transition matrix (size after increment is gamma)
     if ( bUseCustomGrowthMatrix == GROWTH_SIZEGAMMA )
      {
@@ -3543,6 +3549,7 @@ FUNCTION calc_growth_transition
            psi(ll) = cumd_gamma(sbi(ll), mean_size_after_molt);
           gt(l)(l,nSizeSex(h)) = first_difference(psi(l,nclass+1));
           gt(l)(l,nSizeSex(h)) = gt(l)(l,nSizeSex(h)) / sum(gt(l));
+		  
          }
         growth_transition(h,k) = gt;
        }
@@ -3791,7 +3798,7 @@ FUNCTION calc_recruitment_size_distribution
     rec_sdd(h) /= sum(rec_sdd(h)); // Standardize so each row sums to 1.0
    }
 
-   // snow crab way
+   // snow crab way CSS change back when done comparing 
    for ( int h=1; h <=nsex; h++)
    {
     ralpha = ra(h) / rbeta(h);

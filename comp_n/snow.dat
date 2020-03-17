@@ -27,13 +27,14 @@
 #	Natural	mortality	per	season	input	type	(1	=	vector	by	"season,"	2	=	matrix	by	season/year)																																																		
 1																																																																		
 #	Proportion of the total	natural	mortality to be	applied	each	season																																																												
-0.625 0.00 0.375																																																																		
+#0.625 0.00 0.375
+0.62 0.01 0.37																																																																		
 # Fishing fleet	names (delimited with spaces; no spaces in names)																																																																	
 Pot_Fishery Trawl_Bycatch																																																																		
 # Survey names (delimited with spaces; no spaces in names)																																																																		
 NMFS_Trawl																																																																	
 # Are the seasons instantaneous (0) or continuous (1)																																																																		
-1 0 1																																																																	
+1 1 1																																																																	
 #1 1 1 1 1 1 1																																																																		
 # Number of catch data frames																																																																		
 4																																																																		
